@@ -1,8 +1,12 @@
 import { useState, useRef, useContext } from 'react';
+import { useNavigate } from "react-router-dom";
+// we can call useHistory hook as well instead of useNavigate hook
+
 import AuthContext from './AuthContext';
 import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
+  const history = useNavigate();
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
@@ -49,17 +53,37 @@ const AuthForm = () => {
     return res.json();
   } else {
     res.json().then((data) => {
-      authCtx.Login(data.idToken);
-      let errorMessage = "Authentication failed";
-      if (data && data.error && data.error.message) {
-        errorMessage = data.error.message;
-      }
-      alert(errorMessage);
-    });
-  }
-});
+      // show error
+      let errorMessage = "Authentication Failed !";
+            /*if (data && data.error && data.error.message) {
+            errorMessage = data.error.message;
+          }*/
+            throw new Error(errorMessage);
+          });
+        }
+      })
+      .then((data) => {
+        authCtx.Login(data.idToken);
+        history("/"); // redirect the user to starting page 
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+  };
 
-};
+//       authCtx.Login(data.idToken);
+//       history.replace('/');
+
+//       let errorMessage = "Authentication failed";
+//       if (data && data.error && data.error.message) {
+//         errorMessage = data.error.message;
+//       }
+//       alert(errorMessage);
+//     });
+//   }
+// });
+//};
+
   return (
     <section className={classes.auth}>
       <h1>{isLogin ? 'Login' : 'Sign Up'}</h1>

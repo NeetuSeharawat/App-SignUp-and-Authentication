@@ -1,7 +1,11 @@
 import {useRef, useContext} from 'react';
+import { useNavigate } from 'react-router-dom';
+// we can call useHistory hook as well instead of useNavigate hook
 import classes from './ProfileForm.module.css';
 import AuthContext from '../Auth/AuthContext';
+
 const ProfileForm = () => {
+  const history = useNavigate();
   const newPasswordInputRef =useRef();
   const authCtx = useContext(AuthContext);
 
@@ -24,6 +28,7 @@ const ProfileForm = () => {
         //to ensure jSON data come here.
       }
     }).then(res =>{
+      history.replace('/'); // navigate to other routers using push/replace methods.
       //assumption : Always Succeeds!
 
     })
