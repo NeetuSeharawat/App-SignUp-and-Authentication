@@ -1,11 +1,11 @@
 import {useRef, useContext} from 'react';
-import { useNavigate } from 'react-router-dom';
-// we can call useHistory hook as well instead of useNavigate hook
+import { useHistory } from 'react-router-dom';
+// we can call useHistory hook as well instead of useNavigate hook depends on version
 import classes from './ProfileForm.module.css';
 import AuthContext from '../Auth/AuthContext';
 
 const ProfileForm = () => {
-  const history = useNavigate();
+  const history = useHistory();
   const newPasswordInputRef =useRef();
   const authCtx = useContext(AuthContext);
 
@@ -14,7 +14,7 @@ const ProfileForm = () => {
 
     const enteredNewPassword= newPasswordInputRef.current.value;
     // Add Vaildation
-    fetch('https://identitytoolkit.googleapis.com/v1/accounts:Update?key=AIzaSyCuwdlNK_HArrq59Wc3Qjsd5yNizUCUGHw',
+    fetch('https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyCuwdlNK_HArrq59Wc3Qjsd5yNizUCUGHw',
      {
       method:'POST',
      body: JSON.stringify({
@@ -30,7 +30,6 @@ const ProfileForm = () => {
     }).then(res =>{
       history.replace('/'); // navigate to other routers using push/replace methods.
       //assumption : Always Succeeds!
-
     })
   };
   return (

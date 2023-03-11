@@ -1,12 +1,12 @@
 import { useState, useRef, useContext } from 'react';
-import { useNavigate } from "react-router-dom";
-// we can access through earlier version {useHistory} hook as well instead of useNavigate hook
+import { useHistory } from "react-router-dom";
+// we can access through latest version {useNavigate} hook as well if using latest version of dom.
 
 import AuthContext from './AuthContext';
 import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
-  const history = useNavigate();
+  const history = useHistory();
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
@@ -48,11 +48,12 @@ const AuthForm = () => {
     },
   }
 ).then((res) => {
-  if (res.ok) {
+  setIsLoading(false);
+   if (res.ok) {
     console.log("user is succesfully signed up");
     return res.json();
-  } else {
-    res.json().then((data) => {
+   } else {
+    return res.json().then((data) => {
       // show error
       let errorMessage = "Authentication Failed !";
             /*if (data && data.error && data.error.message) {
@@ -64,7 +65,7 @@ const AuthForm = () => {
       })
       .then((data) => {
         authCtx.Login(data.idToken);
-        history.push("/");// redirect the user to starting page 
+        history.replace("/");// redirect the user to starting page 
       })
       .catch((err) => {
         alert(err.message);

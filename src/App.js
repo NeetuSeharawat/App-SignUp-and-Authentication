@@ -1,33 +1,38 @@
-
-import { Route } from 'react-router-dom';
+import { useContext } from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import Layout from './AuthComponents/Layout/Layout';
 import UserProfile from './AuthComponents/Profile/UserProfile';
 import AuthPage from './Authpages/AuthPage';
 import HomePage from './Authpages/HomePage';
-import AuthForm from "./AuthComponents/Auth/AuthForm";
-import { AuthContextProvider } from './AuthComponents/Auth/AuthContext';
+import AuthContext from './AuthComponents/Auth/AuthContext';
 
 
 function App() {
+  const authCtx = useContext(AuthContext);
   return (
-    <AuthForm>
-      <AuthContextProvider>
-      <Layout>
-        <Route path='/' exact>
-          <HomePage />
-        </Route>
-        <Route path='/auth'>
-          <AuthPage />
-        </Route>
-        <Route path='/profile'>
-          <UserProfile />
-        </Route>
-      
+     
+    <Layout>
+       <Switch> 
+            <Route path='/' exact>
+              <HomePage />
+            </Route>
+            {!authCtx.isLoggedIn && (
+            <Route path='/auth'>
+              <AuthPage />
+            </Route>
+            )}
+            <Route path='/profile'>
+            {authCtx.isLoggedIn && <UserProfile />}
+              {!authCtx.isLoggedIn && <Redirect to="/auth" />}
+              </Route>
+              
+              {/*when above cases are invalid then it will render */}
+              <Route path="*">
+              <Redirect to="/" />
+            </Route>
+        </Switch>
     </Layout>
-    </AuthContextProvider>
-    </AuthForm>
-
-  );
+   );
 }
 
 export default App;
