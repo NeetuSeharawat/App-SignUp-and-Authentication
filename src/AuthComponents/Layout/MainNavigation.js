@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import classes from './MainNavigation.module.css';
 import AuthContext from '../Auth/AuthContext';
@@ -7,10 +7,12 @@ const MainNavigation = () => {
   const authCtx = useContext(AuthContext);
   
   const isLoggedIn = authCtx.isLoggedIn; // check user Login or not
+  const history = useNavigate();
 
   const logoutHandler= ()=>{
     authCtx.Logout();
-    //  Can redirect the user here as well
+    history.replace("/auth");
+    // Redirect the user to login page
   }
   return (
     <header className={classes.header}>
